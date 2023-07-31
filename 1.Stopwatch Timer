@@ -1,0 +1,40 @@
+import React, { useState, useRef } from 'react';
+import './styles.css';
+
+export default function App() {
+  const [running, setRunning] = useState(false);
+  const [time, setTime] = useState(0);
+  const myTimer = useRef(null);
+
+  const handleWatch = () => {
+    setRunning(!running);
+    if (!running) {
+      myTimer.current = setInterval(() => {
+        setTime(time => time + 1);
+      }, 10); // Increment by 10 milliseconds
+    } else {
+      clearInterval(myTimer.current);
+    }
+  };
+
+  const handleReset = () => {
+    setTime(0);
+    setRunning(false);
+    clearInterval(myTimer.current);
+  };
+
+  const hours = Math.floor(time / 360000); // 360000 milliseconds in an hour
+  const minutes = Math.floor((time % 360000) / 6000); // 6000 milliseconds in a minute
+  const seconds = Math.floor((time % 6000) / 100); // 100 milliseconds in a second
+  const milliseconds = time % 100;
+
+  return (
+    <div className="App">
+      {hours} : {minutes} : {seconds} : {milliseconds}
+      <br />
+      <br />
+      <button onClick={handleWatch}>{running ? 'Stop' : 'Start'}</button>
+      <button onClick={handleReset}>Reset</button>
+    </div>
+  );
+}
