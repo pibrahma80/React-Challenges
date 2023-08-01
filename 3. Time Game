@@ -1,76 +1,74 @@
-import { useEffect, useState } from "react";
 import "./styles.css";
+import { useState, useEffect } from "react";
 
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(15);
-  const [count, setCount] = useState(0);
   const [gameRunning, setGameRunning] = useState(false);
+  const [time, setTime] = useState(3);
+  const [clicks, setClicks] = useState(0);
+
+  // useEffect(() => {
+  //   let interval;
+  //   if (gameRunning && time > 0) {
+  //     interval = setInterval(() => {
+  //       setTime((prev) => prev - 1);
+  //     }, 1000);
+  //   }
+  //   if (time === 0) {
+  //     setGameRunning(false);
+  //     clearInterval(interval)
+  //     alert("Game has ended");
+  //   }
+
+  //   return () => clearInterval(interval);
+  // }, [gameRunning, time]);
 
   useEffect(() => {
     let interval;
-    if (gameRunning && timeRemaining > 0) {
+    if (gameRunning && time > 0) {
       interval = setInterval(() => {
-        setTimeRemaining((prev) => prev - 1);
+        setTime((prev) => prev - 1);
       }, 1000);
     }
-    if (timeRemaining === 0) {
+    if (time === 0) {
       setGameRunning(false);
-      clearInterval(interval);
-      alert("End of Game. Your Score: " + count);
+      clearInterval(interval); // Clear the interval immediately when time reaches 0
+      setTimeout(() => {
+        alert("Game has ended");
+      }, 100); // Add a small delay before displaying the alert
     }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [gameRunning, timeRemaining, count]);
+  
+    return () => clearInterval(interval);
+  }, [gameRunning, time]);
+  
 
   const handleGame = () => {
-    setTimeRemaining(15);
-    setCount(0);
     setGameRunning(true);
+    setTime(3);
+    setClicks(0); // Reset clicks when starting a new game
   };
 
-  const handleClick = () => {
+  const handleClicks = () => {
+    if (!gameRunning) {
+      alert("Please start the game");
+    }
     if (gameRunning) {
-      setCount((prev) => prev + 1);
+      setClicks((prev) => prev + 1);
     }
   };
 
   return (
-    <div className="App" style={{ fontFamily: "Arial, sans-serif", textAlign: "center" }}>
-      <h1 style={{ marginBottom: "20px" }}>Start Clicking before time runs out</h1>
-      <div style={{ marginBottom: "20px" }}>
-        <p style={{ fontSize: "20px" }}>No of clicks: {count}</p>
-        <p style={{ fontSize: "20px" }}>Time Remaining: {timeRemaining}</p>
-        <button
-          onClick={handleClick}
-          style={{
-            padding: "10px 20px",
-            fontSize: "18px",
-            cursor: gameRunning ? "pointer" : "default",
-            backgroundColor: gameRunning ? "lightblue" : "gray",
-            border: "none",
-            borderRadius: "5px",
-          }}
-          disabled={!gameRunning}
-        >
-          +
-        </button>
-      </div>
-      {!gameRunning && <p>Please start the game:</p>}
+    <div className="App">
+      <h1>Time Remaining - {time}</h1>
+      <h2>No of Clicks - {clicks}</h2>
       <button
         onClick={handleGame}
-        style={{
-          padding: "10px 20px",
-          fontSize: "18px",
-          cursor: "pointer",
-          backgroundColor: "green",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-        }}
+        disabled={gameRunning}
+        style={{ marginRight: "15px" }}
       >
-        Start
+        START
+      </button>
+      <button onClick={handleClicks} disabled={!gameRunning}>
+        +
       </button>
     </div>
   );
