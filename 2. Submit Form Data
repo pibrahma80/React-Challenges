@@ -1,0 +1,88 @@
+import "./styles.css";
+import { useState } from "react";
+
+const UserDetails = ({ data }) => {
+  return (
+    <div>
+      <h1>User data:</h1>
+      <p>
+        <strong>User Name:</strong> {data.username}
+      </p>
+      <p>
+        <strong>User Email:</strong> {data.email}
+      </p>
+      <p>
+        <strong>User Age:</strong> {data.age}
+      </p>
+    </div>
+  );
+};
+
+export default function App() {
+  const [data, setData] = useState({ username: "", email: "", age: "" });
+
+  const handleData = (e) => {
+    e.preventDefault();
+    console.log("Clicked");
+    console.log(data);
+    setData((prev) => ({
+      ...prev,
+      userDetails: true,
+    }));
+  };
+
+  const handleChange = (field, value) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <div className="App" style={{ fontFamily: "Arial, sans-serif" }}>
+      <form onSubmit={handleData}>
+        <label htmlFor="username">User Name:</label>
+        <br />
+        <input
+          id="username"
+          value={data.username}
+          onChange={(e) => handleChange("username", e.target.value)}
+          type="text"
+          style={{ marginBottom: "10px", padding: "5px" }}
+        />
+        <br />
+        <label htmlFor="email">Email:</label>
+        <br />
+        <input
+          id="email"
+          type="email"
+          value={data.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          style={{ marginBottom: "10px", padding: "5px" }}
+        />
+        <br />
+        <label htmlFor="age">User Age:</label>
+        <br />
+        <input
+          id="age"
+          type="number"
+          value={data.age}
+          onChange={(e) => handleChange("age", e.target.value)}
+          style={{ marginBottom: "10px", padding: "5px" }}
+        />
+        <br />
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "lightblue",
+            border: "none",
+            padding: "10px 20px",
+            cursor: "pointer",
+            borderRadius: "5px",
+          }}
+        >
+          Submit
+        </button>
+      </form>
+
+      {data && data.userDetails && <UserDetails data={data} />}
+    </div>
+  );
+}
