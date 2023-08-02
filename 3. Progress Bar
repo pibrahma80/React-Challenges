@@ -1,0 +1,29 @@
+import React, {useState} from "react";
+import "./styles.css";
+
+const ProgressBar = ({ width }) => {
+  return (
+    <div className="progress-bar">
+      <div className="myStyle" style={{ width: `${width}%` }}>
+        {width === 0 ? `${width}%` : '' }
+      </div>
+    </div>
+  );
+};
+
+export default function App() {
+  const [barWidth, setBarWidth] = useState(10)
+
+  return (
+    <>
+      <div className="App">
+        <h1>Progress bar</h1>
+        <ProgressBar width={barWidth} />
+        <form>
+          <label for="html">Input Percentage:</label>
+          <input type="number" onChange={(e)=>setBarWidth(e.target.value)} />
+        </form>
+      </div>
+    </>
+  );
+}
